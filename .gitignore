@@ -1,39 +1,56 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
+bin
 *.a
-
-# http://www.gnu.org/software/automake
-
-Makefile.in
-
-# http://www.gnu.org/software/autoconf
-
-/autom4te.cache
-/aclocal.m4
-/compile
-/configure
-/depcomp
-/install-sh
-/missing
-/m4
-/config.guess
-/config.sub
-
-# http://www.gnu.org/software/libtool
-
-/ar-lib
-/ltmain.sh
-
+*.bc
+*.cmake
+*.dSYM
+*.done
+*.final
+*.gcda
+*.gcno
+*.i
+*.la
+*.lo
+*.log
+*.mem
+*.nexe
+*.o
+*.plist
+*.s
+*.scan
+*.sdf
+*.status
+*.tar.*
 *~
+.DS_Store
+.deps
+.dirstamp
+.done
+.libs
+/bin/
+/obj/
+Build
+INSTALL
+Makefile
+Makefile.in
+Vagrantfile
+aclocal.m4
+autom4te.cache
+build
+compile
+confdefs.h
+config.*
+configure
+configure.lineno
+coverage.info
+depcomp
+install-sh
 
-/unittests/bin
+# Visual studio files
+*.sln
+*.opensdf
+*.sdf
+*.suo
+*.vcxproj
+*.filters
+*.user
+scout.VC.*
