@@ -76,11 +76,16 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+build_triplet = x86_64-unknown-linux-gnu
+host_triplet = x86_64-unknown-linux-gnu
 subdir = btdht/btutils/src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/build-aux/depcomp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -114,26 +119,25 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(libdir)"
-LIBRARIES = $(lib_LIBRARIES)
-ARFLAGS = cru
-AM_V_AR = $(am__v_AR_$(V))
-am__v_AR_ = $(am__v_AR_$(AM_DEFAULT_VERBOSITY))
-am__v_AR_0 = @echo "  AR      " $@;
-am__v_AR_1 = 
-libbtutils_a_AR = $(AR) $(ARFLAGS)
-libbtutils_a_LIBADD =
-am_libbtutils_a_OBJECTS = libbtutils_a-bencoding.$(OBJEXT) \
-	libbtutils_a-bencparser.$(OBJEXT) \
-	libbtutils_a-bitfield.$(OBJEXT) \
-	libbtutils_a-bloom_filter.$(OBJEXT) \
-	libbtutils_a-DecodeEncodedString.$(OBJEXT) \
-	libbtutils_a-get_microseconds.$(OBJEXT) \
-	libbtutils_a-inet_ntop.$(OBJEXT) \
-	libbtutils_a-interlock.$(OBJEXT) \
-	libbtutils_a-RefBase.$(OBJEXT) libbtutils_a-snprintf.$(OBJEXT) \
-	libbtutils_a-sockaddr.$(OBJEXT) \
-	libbtutils_a-udp_utils.$(OBJEXT)
-libbtutils_a_OBJECTS = $(am_libbtutils_a_OBJECTS)
+LTLIBRARIES = $(lib_LTLIBRARIES)
+libbtutils_la_LIBADD =
+am_libbtutils_la_OBJECTS = libbtutils_la-bencoding.lo \
+	libbtutils_la-bencparser.lo libbtutils_la-bitfield.lo \
+	libbtutils_la-bloom_filter.lo \
+	libbtutils_la-DecodeEncodedString.lo \
+	libbtutils_la-get_microseconds.lo libbtutils_la-inet_ntop.lo \
+	libbtutils_la-interlock.lo libbtutils_la-RefBase.lo \
+	libbtutils_la-snprintf.lo libbtutils_la-sockaddr.lo \
+	libbtutils_la-udp_utils.lo
+libbtutils_la_OBJECTS = $(am_libbtutils_la_OBJECTS)
+AM_V_lt = $(am__v_lt_$(V))
+am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+am__v_lt_0 = --silent
+am__v_lt_1 = 
+libbtutils_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
+	$(libbtutils_la_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
+	-o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -150,37 +154,44 @@ DEFAULT_INCLUDES = -I.
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
-AM_V_lt = $(am__v_lt_$(V))
-am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
-am__v_lt_0 = --silent
-am__v_lt_1 = 
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
 AM_V_CXX = $(am__v_CXX_$(V))
 am__v_CXX_ = $(am__v_CXX_$(AM_DEFAULT_VERBOSITY))
 am__v_CXX_0 = @echo "  CXX     " $@;
 am__v_CXX_1 = 
 CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
-	-o $@
+CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_CXXLD = $(am__v_CXXLD_$(V))
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_$(V))
 am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
 am__v_CC_0 = @echo "  CC      " $@;
 am__v_CC_1 = 
 CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libbtutils_a_SOURCES)
-DIST_SOURCES = $(libbtutils_a_SOURCES)
+SOURCES = $(libbtutils_la_SOURCES)
+DIST_SOURCES = $(libbtutils_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -206,13 +217,13 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/nhuang/git/scout/build-aux/missing aclocal-1.13
+ACLOCAL = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing aclocal-1.13
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /home/nhuang/git/scout/build-aux/missing autoconf
-AUTOHEADER = ${SHELL} /home/nhuang/git/scout/build-aux/missing autoheader
-AUTOMAKE = ${SHELL} /home/nhuang/git/scout/build-aux/missing automake-1.13
+AUTOCONF = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing autoconf
+AUTOHEADER = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing autoheader
+AUTOMAKE = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing automake-1.13
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -220,29 +231,44 @@ CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
+CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"scout\" -DPACKAGE_TARNAME=\"scout\" -DPACKAGE_VERSION=\"0.0.0\" -DPACKAGE_STRING=\"scout\ 0.0.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"scout\" -DVERSION=\"0.0.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1
+DEFS = -DPACKAGE_NAME=\"scout\" -DPACKAGE_TARNAME=\"scout\" -DPACKAGE_VERSION=\"0.0.0\" -DPACKAGE_STRING=\"scout\ 0.0.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"scout\" -DVERSION=\"0.0.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\"
 DEPDIR = .deps
+DLLTOOL = false
+DSYMUTIL = 
+DUMPBIN = 
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
 EGREP = /usr/bin/grep -E
 EXEEXT = 
+FGREP = /usr/bin/grep -F
 GREP = /usr/bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
+LD = /usr/bin/ld -m elf_x86_64
 LDFLAGS = 
 LIBOBJS = 
 LIBS = 
+LIBTOOL = $(SHELL) $(top_builddir)/libtool
+LIPO = 
+LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/nhuang/git/scout/build-aux/missing makeinfo
+MAKEINFO = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/missing makeinfo
+MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
+NM = /usr/bin/nm -B
+NMEDIT = 
+OBJDUMP = objdump
 OBJEXT = o
+OTOOL = 
+OTOOL64 = 
 PACKAGE = scout
 PACKAGE_BUGREPORT = 
 PACKAGE_NAME = scout
@@ -252,35 +278,45 @@ PACKAGE_URL =
 PACKAGE_VERSION = 0.0.0
 PATH_SEPARATOR = :
 RANLIB = ranlib
+SED = /usr/bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
-STRIP = 
+STRIP = strip
 VERSION = 0.0.0
-abs_builddir = /home/nhuang/git/scout/btdht/btutils/src
-abs_srcdir = /home/nhuang/git/scout/btdht/btutils/src
-abs_top_builddir = /home/nhuang/git/scout
-abs_top_srcdir = /home/nhuang/git/scout
+abs_builddir = /home/nhuang/Documents/scout-xplat/scout/btdht/btutils/src
+abs_srcdir = /home/nhuang/Documents/scout-xplat/scout/btdht/btutils/src
+abs_top_builddir = /home/nhuang/Documents/scout-xplat/scout
+abs_top_srcdir = /home/nhuang/Documents/scout-xplat/scout
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
+ac_ct_DUMPBIN = 
 am__include = include
 am__leading_dot = .
 am__quote = 
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
+build = x86_64-unknown-linux-gnu
 build_alias = 
+build_cpu = x86_64
+build_os = linux-gnu
+build_vendor = unknown
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
+host = x86_64-unknown-linux-gnu
 host_alias = 
+host_cpu = x86_64
+host_os = linux-gnu
+host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/nhuang/git/scout/build-aux/install-sh
+install_sh = ${SHELL} /home/nhuang/Documents/scout-xplat/scout/build-aux/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -300,10 +336,10 @@ target_alias =
 top_build_prefix = ../../../
 top_builddir = ../../..
 top_srcdir = ../../..
-lib_LIBRARIES = \
-	libbtutils.a
+lib_LTLIBRARIES = \
+	libbtutils.la
 
-libbtutils_a_SOURCES = \
+libbtutils_la_SOURCES = \
 	bench-json.h \
 	bencoding.h \
 	bencoding.cpp \
@@ -338,11 +374,11 @@ libbtutils_a_SOURCES = \
 	udp_utils.cpp \
 	utypes.h
 
-libbtutils_a_CXXFLAGS = -std=c++11
+libbtutils_la_CXXFLAGS = -std=c++11
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -373,9 +409,10 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-install-libLIBRARIES: $(lib_LIBRARIES)
+
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	list2=; for p in $$list; do \
 	  if test -f $$p; then \
 	    list2="$$list2 $$p"; \
@@ -384,31 +421,32 @@ install-libLIBRARIES: $(lib_LIBRARIES)
 	test -z "$$list2" || { \
 	  echo " $(MKDIR_P) '$(DESTDIR)$(libdir)'"; \
 	  $(MKDIR_P) "$(DESTDIR)$(libdir)" || exit 1; \
-	  echo " $(INSTALL_DATA) $$list2 '$(DESTDIR)$(libdir)'"; \
-	  $(INSTALL_DATA) $$list2 "$(DESTDIR)$(libdir)" || exit $$?; }
-	@$(POST_INSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
+	}
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	for p in $$list; do \
-	  if test -f $$p; then \
-	    $(am__strip_dir) \
-	    echo " ( cd '$(DESTDIR)$(libdir)' && $(RANLIB) $$f )"; \
-	    ( cd "$(DESTDIR)$(libdir)" && $(RANLIB) $$f ) || exit $$?; \
-	  else :; fi; \
+	  $(am__strip_dir) \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
 	done
 
-uninstall-libLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(libdir)'; $(am__uninstall_files_from_dir)
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; \
+	locs=`for p in $$list; do echo $$p; done | \
+	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
+	      sort -u`; \
+	test -z "$$locs" || { \
+	  echo rm -f $${locs}; \
+	  rm -f $${locs}; \
+	}
 
-clean-libLIBRARIES:
-	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
-
-libbtutils.a: $(libbtutils_a_OBJECTS) $(libbtutils_a_DEPENDENCIES) $(EXTRA_libbtutils_a_DEPENDENCIES) 
-	$(AM_V_at)-rm -f libbtutils.a
-	$(AM_V_AR)$(libbtutils_a_AR) libbtutils.a $(libbtutils_a_OBJECTS) $(libbtutils_a_LIBADD)
-	$(AM_V_at)$(RANLIB) libbtutils.a
+libbtutils.la: $(libbtutils_la_OBJECTS) $(libbtutils_la_DEPENDENCIES) $(EXTRA_libbtutils_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(libbtutils_la_LINK) -rpath $(libdir) $(libbtutils_la_OBJECTS) $(libbtutils_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -416,18 +454,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/libbtutils_a-DecodeEncodedString.Po
-include ./$(DEPDIR)/libbtutils_a-RefBase.Po
-include ./$(DEPDIR)/libbtutils_a-bencoding.Po
-include ./$(DEPDIR)/libbtutils_a-bencparser.Po
-include ./$(DEPDIR)/libbtutils_a-bitfield.Po
-include ./$(DEPDIR)/libbtutils_a-bloom_filter.Po
-include ./$(DEPDIR)/libbtutils_a-get_microseconds.Po
-include ./$(DEPDIR)/libbtutils_a-inet_ntop.Po
-include ./$(DEPDIR)/libbtutils_a-interlock.Po
-include ./$(DEPDIR)/libbtutils_a-snprintf.Po
-include ./$(DEPDIR)/libbtutils_a-sockaddr.Po
-include ./$(DEPDIR)/libbtutils_a-udp_utils.Po
+include ./$(DEPDIR)/libbtutils_la-DecodeEncodedString.Plo
+include ./$(DEPDIR)/libbtutils_la-RefBase.Plo
+include ./$(DEPDIR)/libbtutils_la-bencoding.Plo
+include ./$(DEPDIR)/libbtutils_la-bencparser.Plo
+include ./$(DEPDIR)/libbtutils_la-bitfield.Plo
+include ./$(DEPDIR)/libbtutils_la-bloom_filter.Plo
+include ./$(DEPDIR)/libbtutils_la-get_microseconds.Plo
+include ./$(DEPDIR)/libbtutils_la-inet_ntop.Plo
+include ./$(DEPDIR)/libbtutils_la-interlock.Plo
+include ./$(DEPDIR)/libbtutils_la-snprintf.Plo
+include ./$(DEPDIR)/libbtutils_la-sockaddr.Plo
+include ./$(DEPDIR)/libbtutils_la-udp_utils.Plo
 
 .cpp.o:
 	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -443,173 +481,102 @@ include ./$(DEPDIR)/libbtutils_a-udp_utils.Po
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-libbtutils_a-bencoding.o: bencoding.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bencoding.o -MD -MP -MF $(DEPDIR)/libbtutils_a-bencoding.Tpo -c -o libbtutils_a-bencoding.o `test -f 'bencoding.cpp' || echo '$(srcdir)/'`bencoding.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bencoding.Tpo $(DEPDIR)/libbtutils_a-bencoding.Po
-#	$(AM_V_CXX)source='bencoding.cpp' object='libbtutils_a-bencoding.o' libtool=no \
+.cpp.lo:
+	$(AM_V_CXX)$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+#	$(AM_V_CXX)source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bencoding.o `test -f 'bencoding.cpp' || echo '$(srcdir)/'`bencoding.cpp
+#	$(AM_V_CXX_no)$(LTCXXCOMPILE) -c -o $@ $<
 
-libbtutils_a-bencoding.obj: bencoding.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bencoding.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-bencoding.Tpo -c -o libbtutils_a-bencoding.obj `if test -f 'bencoding.cpp'; then $(CYGPATH_W) 'bencoding.cpp'; else $(CYGPATH_W) '$(srcdir)/bencoding.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bencoding.Tpo $(DEPDIR)/libbtutils_a-bencoding.Po
-#	$(AM_V_CXX)source='bencoding.cpp' object='libbtutils_a-bencoding.obj' libtool=no \
+libbtutils_la-bencoding.lo: bencoding.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-bencoding.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-bencoding.Tpo -c -o libbtutils_la-bencoding.lo `test -f 'bencoding.cpp' || echo '$(srcdir)/'`bencoding.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-bencoding.Tpo $(DEPDIR)/libbtutils_la-bencoding.Plo
+#	$(AM_V_CXX)source='bencoding.cpp' object='libbtutils_la-bencoding.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bencoding.obj `if test -f 'bencoding.cpp'; then $(CYGPATH_W) 'bencoding.cpp'; else $(CYGPATH_W) '$(srcdir)/bencoding.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-bencoding.lo `test -f 'bencoding.cpp' || echo '$(srcdir)/'`bencoding.cpp
 
-libbtutils_a-bencparser.o: bencparser.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bencparser.o -MD -MP -MF $(DEPDIR)/libbtutils_a-bencparser.Tpo -c -o libbtutils_a-bencparser.o `test -f 'bencparser.cpp' || echo '$(srcdir)/'`bencparser.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bencparser.Tpo $(DEPDIR)/libbtutils_a-bencparser.Po
-#	$(AM_V_CXX)source='bencparser.cpp' object='libbtutils_a-bencparser.o' libtool=no \
+libbtutils_la-bencparser.lo: bencparser.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-bencparser.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-bencparser.Tpo -c -o libbtutils_la-bencparser.lo `test -f 'bencparser.cpp' || echo '$(srcdir)/'`bencparser.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-bencparser.Tpo $(DEPDIR)/libbtutils_la-bencparser.Plo
+#	$(AM_V_CXX)source='bencparser.cpp' object='libbtutils_la-bencparser.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bencparser.o `test -f 'bencparser.cpp' || echo '$(srcdir)/'`bencparser.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-bencparser.lo `test -f 'bencparser.cpp' || echo '$(srcdir)/'`bencparser.cpp
 
-libbtutils_a-bencparser.obj: bencparser.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bencparser.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-bencparser.Tpo -c -o libbtutils_a-bencparser.obj `if test -f 'bencparser.cpp'; then $(CYGPATH_W) 'bencparser.cpp'; else $(CYGPATH_W) '$(srcdir)/bencparser.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bencparser.Tpo $(DEPDIR)/libbtutils_a-bencparser.Po
-#	$(AM_V_CXX)source='bencparser.cpp' object='libbtutils_a-bencparser.obj' libtool=no \
+libbtutils_la-bitfield.lo: bitfield.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-bitfield.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-bitfield.Tpo -c -o libbtutils_la-bitfield.lo `test -f 'bitfield.cpp' || echo '$(srcdir)/'`bitfield.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-bitfield.Tpo $(DEPDIR)/libbtutils_la-bitfield.Plo
+#	$(AM_V_CXX)source='bitfield.cpp' object='libbtutils_la-bitfield.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bencparser.obj `if test -f 'bencparser.cpp'; then $(CYGPATH_W) 'bencparser.cpp'; else $(CYGPATH_W) '$(srcdir)/bencparser.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-bitfield.lo `test -f 'bitfield.cpp' || echo '$(srcdir)/'`bitfield.cpp
 
-libbtutils_a-bitfield.o: bitfield.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bitfield.o -MD -MP -MF $(DEPDIR)/libbtutils_a-bitfield.Tpo -c -o libbtutils_a-bitfield.o `test -f 'bitfield.cpp' || echo '$(srcdir)/'`bitfield.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bitfield.Tpo $(DEPDIR)/libbtutils_a-bitfield.Po
-#	$(AM_V_CXX)source='bitfield.cpp' object='libbtutils_a-bitfield.o' libtool=no \
+libbtutils_la-bloom_filter.lo: bloom_filter.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-bloom_filter.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-bloom_filter.Tpo -c -o libbtutils_la-bloom_filter.lo `test -f 'bloom_filter.cpp' || echo '$(srcdir)/'`bloom_filter.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-bloom_filter.Tpo $(DEPDIR)/libbtutils_la-bloom_filter.Plo
+#	$(AM_V_CXX)source='bloom_filter.cpp' object='libbtutils_la-bloom_filter.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bitfield.o `test -f 'bitfield.cpp' || echo '$(srcdir)/'`bitfield.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-bloom_filter.lo `test -f 'bloom_filter.cpp' || echo '$(srcdir)/'`bloom_filter.cpp
 
-libbtutils_a-bitfield.obj: bitfield.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bitfield.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-bitfield.Tpo -c -o libbtutils_a-bitfield.obj `if test -f 'bitfield.cpp'; then $(CYGPATH_W) 'bitfield.cpp'; else $(CYGPATH_W) '$(srcdir)/bitfield.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bitfield.Tpo $(DEPDIR)/libbtutils_a-bitfield.Po
-#	$(AM_V_CXX)source='bitfield.cpp' object='libbtutils_a-bitfield.obj' libtool=no \
+libbtutils_la-DecodeEncodedString.lo: DecodeEncodedString.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-DecodeEncodedString.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-DecodeEncodedString.Tpo -c -o libbtutils_la-DecodeEncodedString.lo `test -f 'DecodeEncodedString.cpp' || echo '$(srcdir)/'`DecodeEncodedString.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-DecodeEncodedString.Tpo $(DEPDIR)/libbtutils_la-DecodeEncodedString.Plo
+#	$(AM_V_CXX)source='DecodeEncodedString.cpp' object='libbtutils_la-DecodeEncodedString.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bitfield.obj `if test -f 'bitfield.cpp'; then $(CYGPATH_W) 'bitfield.cpp'; else $(CYGPATH_W) '$(srcdir)/bitfield.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-DecodeEncodedString.lo `test -f 'DecodeEncodedString.cpp' || echo '$(srcdir)/'`DecodeEncodedString.cpp
 
-libbtutils_a-bloom_filter.o: bloom_filter.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bloom_filter.o -MD -MP -MF $(DEPDIR)/libbtutils_a-bloom_filter.Tpo -c -o libbtutils_a-bloom_filter.o `test -f 'bloom_filter.cpp' || echo '$(srcdir)/'`bloom_filter.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bloom_filter.Tpo $(DEPDIR)/libbtutils_a-bloom_filter.Po
-#	$(AM_V_CXX)source='bloom_filter.cpp' object='libbtutils_a-bloom_filter.o' libtool=no \
+libbtutils_la-get_microseconds.lo: get_microseconds.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-get_microseconds.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-get_microseconds.Tpo -c -o libbtutils_la-get_microseconds.lo `test -f 'get_microseconds.cpp' || echo '$(srcdir)/'`get_microseconds.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-get_microseconds.Tpo $(DEPDIR)/libbtutils_la-get_microseconds.Plo
+#	$(AM_V_CXX)source='get_microseconds.cpp' object='libbtutils_la-get_microseconds.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bloom_filter.o `test -f 'bloom_filter.cpp' || echo '$(srcdir)/'`bloom_filter.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-get_microseconds.lo `test -f 'get_microseconds.cpp' || echo '$(srcdir)/'`get_microseconds.cpp
 
-libbtutils_a-bloom_filter.obj: bloom_filter.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-bloom_filter.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-bloom_filter.Tpo -c -o libbtutils_a-bloom_filter.obj `if test -f 'bloom_filter.cpp'; then $(CYGPATH_W) 'bloom_filter.cpp'; else $(CYGPATH_W) '$(srcdir)/bloom_filter.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-bloom_filter.Tpo $(DEPDIR)/libbtutils_a-bloom_filter.Po
-#	$(AM_V_CXX)source='bloom_filter.cpp' object='libbtutils_a-bloom_filter.obj' libtool=no \
+libbtutils_la-inet_ntop.lo: inet_ntop.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-inet_ntop.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-inet_ntop.Tpo -c -o libbtutils_la-inet_ntop.lo `test -f 'inet_ntop.cpp' || echo '$(srcdir)/'`inet_ntop.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-inet_ntop.Tpo $(DEPDIR)/libbtutils_la-inet_ntop.Plo
+#	$(AM_V_CXX)source='inet_ntop.cpp' object='libbtutils_la-inet_ntop.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-bloom_filter.obj `if test -f 'bloom_filter.cpp'; then $(CYGPATH_W) 'bloom_filter.cpp'; else $(CYGPATH_W) '$(srcdir)/bloom_filter.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-inet_ntop.lo `test -f 'inet_ntop.cpp' || echo '$(srcdir)/'`inet_ntop.cpp
 
-libbtutils_a-DecodeEncodedString.o: DecodeEncodedString.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-DecodeEncodedString.o -MD -MP -MF $(DEPDIR)/libbtutils_a-DecodeEncodedString.Tpo -c -o libbtutils_a-DecodeEncodedString.o `test -f 'DecodeEncodedString.cpp' || echo '$(srcdir)/'`DecodeEncodedString.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-DecodeEncodedString.Tpo $(DEPDIR)/libbtutils_a-DecodeEncodedString.Po
-#	$(AM_V_CXX)source='DecodeEncodedString.cpp' object='libbtutils_a-DecodeEncodedString.o' libtool=no \
+libbtutils_la-interlock.lo: interlock.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-interlock.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-interlock.Tpo -c -o libbtutils_la-interlock.lo `test -f 'interlock.cpp' || echo '$(srcdir)/'`interlock.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-interlock.Tpo $(DEPDIR)/libbtutils_la-interlock.Plo
+#	$(AM_V_CXX)source='interlock.cpp' object='libbtutils_la-interlock.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-DecodeEncodedString.o `test -f 'DecodeEncodedString.cpp' || echo '$(srcdir)/'`DecodeEncodedString.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-interlock.lo `test -f 'interlock.cpp' || echo '$(srcdir)/'`interlock.cpp
 
-libbtutils_a-DecodeEncodedString.obj: DecodeEncodedString.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-DecodeEncodedString.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-DecodeEncodedString.Tpo -c -o libbtutils_a-DecodeEncodedString.obj `if test -f 'DecodeEncodedString.cpp'; then $(CYGPATH_W) 'DecodeEncodedString.cpp'; else $(CYGPATH_W) '$(srcdir)/DecodeEncodedString.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-DecodeEncodedString.Tpo $(DEPDIR)/libbtutils_a-DecodeEncodedString.Po
-#	$(AM_V_CXX)source='DecodeEncodedString.cpp' object='libbtutils_a-DecodeEncodedString.obj' libtool=no \
+libbtutils_la-RefBase.lo: RefBase.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-RefBase.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-RefBase.Tpo -c -o libbtutils_la-RefBase.lo `test -f 'RefBase.cpp' || echo '$(srcdir)/'`RefBase.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-RefBase.Tpo $(DEPDIR)/libbtutils_la-RefBase.Plo
+#	$(AM_V_CXX)source='RefBase.cpp' object='libbtutils_la-RefBase.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-DecodeEncodedString.obj `if test -f 'DecodeEncodedString.cpp'; then $(CYGPATH_W) 'DecodeEncodedString.cpp'; else $(CYGPATH_W) '$(srcdir)/DecodeEncodedString.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-RefBase.lo `test -f 'RefBase.cpp' || echo '$(srcdir)/'`RefBase.cpp
 
-libbtutils_a-get_microseconds.o: get_microseconds.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-get_microseconds.o -MD -MP -MF $(DEPDIR)/libbtutils_a-get_microseconds.Tpo -c -o libbtutils_a-get_microseconds.o `test -f 'get_microseconds.cpp' || echo '$(srcdir)/'`get_microseconds.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-get_microseconds.Tpo $(DEPDIR)/libbtutils_a-get_microseconds.Po
-#	$(AM_V_CXX)source='get_microseconds.cpp' object='libbtutils_a-get_microseconds.o' libtool=no \
+libbtutils_la-snprintf.lo: snprintf.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-snprintf.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-snprintf.Tpo -c -o libbtutils_la-snprintf.lo `test -f 'snprintf.cpp' || echo '$(srcdir)/'`snprintf.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-snprintf.Tpo $(DEPDIR)/libbtutils_la-snprintf.Plo
+#	$(AM_V_CXX)source='snprintf.cpp' object='libbtutils_la-snprintf.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-get_microseconds.o `test -f 'get_microseconds.cpp' || echo '$(srcdir)/'`get_microseconds.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-snprintf.lo `test -f 'snprintf.cpp' || echo '$(srcdir)/'`snprintf.cpp
 
-libbtutils_a-get_microseconds.obj: get_microseconds.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-get_microseconds.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-get_microseconds.Tpo -c -o libbtutils_a-get_microseconds.obj `if test -f 'get_microseconds.cpp'; then $(CYGPATH_W) 'get_microseconds.cpp'; else $(CYGPATH_W) '$(srcdir)/get_microseconds.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-get_microseconds.Tpo $(DEPDIR)/libbtutils_a-get_microseconds.Po
-#	$(AM_V_CXX)source='get_microseconds.cpp' object='libbtutils_a-get_microseconds.obj' libtool=no \
+libbtutils_la-sockaddr.lo: sockaddr.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-sockaddr.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-sockaddr.Tpo -c -o libbtutils_la-sockaddr.lo `test -f 'sockaddr.cpp' || echo '$(srcdir)/'`sockaddr.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-sockaddr.Tpo $(DEPDIR)/libbtutils_la-sockaddr.Plo
+#	$(AM_V_CXX)source='sockaddr.cpp' object='libbtutils_la-sockaddr.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-get_microseconds.obj `if test -f 'get_microseconds.cpp'; then $(CYGPATH_W) 'get_microseconds.cpp'; else $(CYGPATH_W) '$(srcdir)/get_microseconds.cpp'; fi`
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-sockaddr.lo `test -f 'sockaddr.cpp' || echo '$(srcdir)/'`sockaddr.cpp
 
-libbtutils_a-inet_ntop.o: inet_ntop.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-inet_ntop.o -MD -MP -MF $(DEPDIR)/libbtutils_a-inet_ntop.Tpo -c -o libbtutils_a-inet_ntop.o `test -f 'inet_ntop.cpp' || echo '$(srcdir)/'`inet_ntop.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-inet_ntop.Tpo $(DEPDIR)/libbtutils_a-inet_ntop.Po
-#	$(AM_V_CXX)source='inet_ntop.cpp' object='libbtutils_a-inet_ntop.o' libtool=no \
+libbtutils_la-udp_utils.lo: udp_utils.cpp
+	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_la-udp_utils.lo -MD -MP -MF $(DEPDIR)/libbtutils_la-udp_utils.Tpo -c -o libbtutils_la-udp_utils.lo `test -f 'udp_utils.cpp' || echo '$(srcdir)/'`udp_utils.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_la-udp_utils.Tpo $(DEPDIR)/libbtutils_la-udp_utils.Plo
+#	$(AM_V_CXX)source='udp_utils.cpp' object='libbtutils_la-udp_utils.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-inet_ntop.o `test -f 'inet_ntop.cpp' || echo '$(srcdir)/'`inet_ntop.cpp
+#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_la_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_la-udp_utils.lo `test -f 'udp_utils.cpp' || echo '$(srcdir)/'`udp_utils.cpp
 
-libbtutils_a-inet_ntop.obj: inet_ntop.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-inet_ntop.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-inet_ntop.Tpo -c -o libbtutils_a-inet_ntop.obj `if test -f 'inet_ntop.cpp'; then $(CYGPATH_W) 'inet_ntop.cpp'; else $(CYGPATH_W) '$(srcdir)/inet_ntop.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-inet_ntop.Tpo $(DEPDIR)/libbtutils_a-inet_ntop.Po
-#	$(AM_V_CXX)source='inet_ntop.cpp' object='libbtutils_a-inet_ntop.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-inet_ntop.obj `if test -f 'inet_ntop.cpp'; then $(CYGPATH_W) 'inet_ntop.cpp'; else $(CYGPATH_W) '$(srcdir)/inet_ntop.cpp'; fi`
+mostlyclean-libtool:
+	-rm -f *.lo
 
-libbtutils_a-interlock.o: interlock.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-interlock.o -MD -MP -MF $(DEPDIR)/libbtutils_a-interlock.Tpo -c -o libbtutils_a-interlock.o `test -f 'interlock.cpp' || echo '$(srcdir)/'`interlock.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-interlock.Tpo $(DEPDIR)/libbtutils_a-interlock.Po
-#	$(AM_V_CXX)source='interlock.cpp' object='libbtutils_a-interlock.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-interlock.o `test -f 'interlock.cpp' || echo '$(srcdir)/'`interlock.cpp
-
-libbtutils_a-interlock.obj: interlock.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-interlock.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-interlock.Tpo -c -o libbtutils_a-interlock.obj `if test -f 'interlock.cpp'; then $(CYGPATH_W) 'interlock.cpp'; else $(CYGPATH_W) '$(srcdir)/interlock.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-interlock.Tpo $(DEPDIR)/libbtutils_a-interlock.Po
-#	$(AM_V_CXX)source='interlock.cpp' object='libbtutils_a-interlock.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-interlock.obj `if test -f 'interlock.cpp'; then $(CYGPATH_W) 'interlock.cpp'; else $(CYGPATH_W) '$(srcdir)/interlock.cpp'; fi`
-
-libbtutils_a-RefBase.o: RefBase.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-RefBase.o -MD -MP -MF $(DEPDIR)/libbtutils_a-RefBase.Tpo -c -o libbtutils_a-RefBase.o `test -f 'RefBase.cpp' || echo '$(srcdir)/'`RefBase.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-RefBase.Tpo $(DEPDIR)/libbtutils_a-RefBase.Po
-#	$(AM_V_CXX)source='RefBase.cpp' object='libbtutils_a-RefBase.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-RefBase.o `test -f 'RefBase.cpp' || echo '$(srcdir)/'`RefBase.cpp
-
-libbtutils_a-RefBase.obj: RefBase.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-RefBase.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-RefBase.Tpo -c -o libbtutils_a-RefBase.obj `if test -f 'RefBase.cpp'; then $(CYGPATH_W) 'RefBase.cpp'; else $(CYGPATH_W) '$(srcdir)/RefBase.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-RefBase.Tpo $(DEPDIR)/libbtutils_a-RefBase.Po
-#	$(AM_V_CXX)source='RefBase.cpp' object='libbtutils_a-RefBase.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-RefBase.obj `if test -f 'RefBase.cpp'; then $(CYGPATH_W) 'RefBase.cpp'; else $(CYGPATH_W) '$(srcdir)/RefBase.cpp'; fi`
-
-libbtutils_a-snprintf.o: snprintf.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-snprintf.o -MD -MP -MF $(DEPDIR)/libbtutils_a-snprintf.Tpo -c -o libbtutils_a-snprintf.o `test -f 'snprintf.cpp' || echo '$(srcdir)/'`snprintf.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-snprintf.Tpo $(DEPDIR)/libbtutils_a-snprintf.Po
-#	$(AM_V_CXX)source='snprintf.cpp' object='libbtutils_a-snprintf.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-snprintf.o `test -f 'snprintf.cpp' || echo '$(srcdir)/'`snprintf.cpp
-
-libbtutils_a-snprintf.obj: snprintf.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-snprintf.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-snprintf.Tpo -c -o libbtutils_a-snprintf.obj `if test -f 'snprintf.cpp'; then $(CYGPATH_W) 'snprintf.cpp'; else $(CYGPATH_W) '$(srcdir)/snprintf.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-snprintf.Tpo $(DEPDIR)/libbtutils_a-snprintf.Po
-#	$(AM_V_CXX)source='snprintf.cpp' object='libbtutils_a-snprintf.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-snprintf.obj `if test -f 'snprintf.cpp'; then $(CYGPATH_W) 'snprintf.cpp'; else $(CYGPATH_W) '$(srcdir)/snprintf.cpp'; fi`
-
-libbtutils_a-sockaddr.o: sockaddr.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-sockaddr.o -MD -MP -MF $(DEPDIR)/libbtutils_a-sockaddr.Tpo -c -o libbtutils_a-sockaddr.o `test -f 'sockaddr.cpp' || echo '$(srcdir)/'`sockaddr.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-sockaddr.Tpo $(DEPDIR)/libbtutils_a-sockaddr.Po
-#	$(AM_V_CXX)source='sockaddr.cpp' object='libbtutils_a-sockaddr.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-sockaddr.o `test -f 'sockaddr.cpp' || echo '$(srcdir)/'`sockaddr.cpp
-
-libbtutils_a-sockaddr.obj: sockaddr.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-sockaddr.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-sockaddr.Tpo -c -o libbtutils_a-sockaddr.obj `if test -f 'sockaddr.cpp'; then $(CYGPATH_W) 'sockaddr.cpp'; else $(CYGPATH_W) '$(srcdir)/sockaddr.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-sockaddr.Tpo $(DEPDIR)/libbtutils_a-sockaddr.Po
-#	$(AM_V_CXX)source='sockaddr.cpp' object='libbtutils_a-sockaddr.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-sockaddr.obj `if test -f 'sockaddr.cpp'; then $(CYGPATH_W) 'sockaddr.cpp'; else $(CYGPATH_W) '$(srcdir)/sockaddr.cpp'; fi`
-
-libbtutils_a-udp_utils.o: udp_utils.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-udp_utils.o -MD -MP -MF $(DEPDIR)/libbtutils_a-udp_utils.Tpo -c -o libbtutils_a-udp_utils.o `test -f 'udp_utils.cpp' || echo '$(srcdir)/'`udp_utils.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-udp_utils.Tpo $(DEPDIR)/libbtutils_a-udp_utils.Po
-#	$(AM_V_CXX)source='udp_utils.cpp' object='libbtutils_a-udp_utils.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-udp_utils.o `test -f 'udp_utils.cpp' || echo '$(srcdir)/'`udp_utils.cpp
-
-libbtutils_a-udp_utils.obj: udp_utils.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -MT libbtutils_a-udp_utils.obj -MD -MP -MF $(DEPDIR)/libbtutils_a-udp_utils.Tpo -c -o libbtutils_a-udp_utils.obj `if test -f 'udp_utils.cpp'; then $(CYGPATH_W) 'udp_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/udp_utils.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libbtutils_a-udp_utils.Tpo $(DEPDIR)/libbtutils_a-udp_utils.Po
-#	$(AM_V_CXX)source='udp_utils.cpp' object='libbtutils_a-udp_utils.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbtutils_a_CXXFLAGS) $(CXXFLAGS) -c -o libbtutils_a-udp_utils.obj `if test -f 'udp_utils.cpp'; then $(CYGPATH_W) 'udp_utils.cpp'; else $(CYGPATH_W) '$(srcdir)/udp_utils.cpp'; fi`
+clean-libtool:
+	-rm -rf .libs _libs
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -695,7 +662,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -732,7 +699,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLIBRARIES mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -758,7 +726,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLIBRARIES
+install-exec-am: install-libLTLIBRARIES
 
 install-html: install-html-am
 
@@ -787,7 +755,8 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -797,22 +766,23 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLIBRARIES
+uninstall-am: uninstall-libLTLIBRARIES
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
-	clean-libLIBRARIES cscopelist-am ctags ctags-am distclean \
-	distclean-compile distclean-generic distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-libLIBRARIES install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-libLIBRARIES
+	clean-libLTLIBRARIES clean-libtool cscopelist-am ctags \
+	ctags-am distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-libLTLIBRARIES install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

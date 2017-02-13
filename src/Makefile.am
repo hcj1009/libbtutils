@@ -1,7 +1,7 @@
-lib_LIBRARIES = \
-	libbtutils.a
+lib_LTLIBRARIES = \
+	libbtutils.la
 
-libbtutils_a_SOURCES = \
+libbtutils_la_SOURCES = \
 	bench-json.h \
 	bencoding.h \
 	bencoding.cpp \
@@ -36,4 +36,4 @@ libbtutils_a_SOURCES = \
 	udp_utils.cpp \
 	utypes.h
 
-libbtutils_a_CXXFLAGS = -std=c++11
+libbtutils_la_CXXFLAGS = -std=c++11
